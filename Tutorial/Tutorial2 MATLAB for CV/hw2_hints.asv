@@ -1,0 +1,56 @@
+close all; clear all; clc;
+
+img=imread('lena.jpg');
+figure; imshow(img); title('Original Image');
+[m n p] = size(img);
+
+% Adding Noise
+noise_img=imnoise(img,'gaussian');
+figure, imshow(noise_img); title('noisy Image');
+
+% function padarray: pad the image for filtering
+help padarray
+
+%define smoothing filter
+average_filter = 1/25 * ones(5, 5);
+% visualize filter
+imshow(average_filter)
+% bascic operation with filter
+img_crop = noise_img(1:5, 1:5, 1);
+multiply_elementwise = double(img_crop) .* average_filter;
+sum_column = sum(multiply_elementwise);
+sum_all = sum(sum_column);
+final_res = uint8(sum_all);
+
+% 
+%subtracted image
+sub_image = double(noise_img)-double(img);
+imshow(sub_image)
+
+% 
+% %sharpened image
+sharp_img = double(img)+double(sub_image);
+
+% 
+% Hints for Frequency Filter
+% 
+FT_img = fftshift(fft2(double(image)));
+
+% Calculate the inverse FFT
+out_img = real(ifft2(double(G))); 
+
+
+% 
+%  input_image = imread('lena.jpg');
+%  [Gx Gy Filtered_Image] = prewitt_edge_detector2(input_image,00);
+%  figure; imshow(uint8(Filtered_Image)); title('1(a) Prewitt Edge Detector');
+% 
+%  
+%  [Gx Gy Filtered_Image] = sobel_edge_detector2(input_image,00);
+% % figure; imshow(uint8(abs(Gx))); title('Sobel Edge Gx Detector');
+% % figure; imshow(uint8(abs(Gy))); title('Sobel Edge Gy Detector');
+%  figure; imshow(uint8(Filtered_Image)); title('1(b) Sobel Edge (Mag) Detector');
+% 
+%  CannyOutput = CannyEdgeDetector(input_image, 0.3, 0.5, 1);
+%  figure; imshow(uint8(CannyOutput)); title('2(f) Canny Edge Detector');
+
